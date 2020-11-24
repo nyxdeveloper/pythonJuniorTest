@@ -29,19 +29,32 @@
     {% for i in todos %}
         <li class="list-group-item d-flex justify-content-between align-items-center m-2 rounded">
             <div class="title">
-                <input type="checkbox" class="m-2">
+                {% if not i.failed %}
+                    <button style="font-size: 10px" class="rounded btn btn-outline-success">&#10004</button>
+                {% endif %}
+                <button style="font-size: 10px" class="rounded btn btn-outline-danger">&#10006</button>
                 {{ i.title }}
             </div>
             <div class="deadline">
                 {{ i.deadline }}
             </div>
+            {% if i.failed %}
+                <span class="badge badge-danger badge-pill">Провалено</span>
+            {% elif i.lastDay %}
+                <span class="badge badge-warning badge-pill">Последний день</span>
+            {% else %}
+                <span class="badge badge-primary badge-pill">Выполняется</span>
+            {% endif %}
+
             <span class="badge badge-{{ i.status.last.styleKey }} badge-pill">{{ i.status.last.title }}</span>
         </li>
     {% endfor %}
 
 <form class="todoAddForm" method="post" action="{% url 'addTodo' %}">
     {% csrf_token %}
-    {{ todoAddForm }}
+    {% for inp in todoAddForm %}
+        {{ inp }}
+    {% endfor %}
     <div class="container">
         <button class="btn btn-lg btn-primary btn-block mt-2 w-25 ml-auto mr-auto" type="submit">Добавить</button>
     </div>
