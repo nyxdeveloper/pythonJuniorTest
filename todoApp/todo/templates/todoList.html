@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Todo List{% endblock %}
 {% block content %}
-<button type="button" class="btn btn-outline-success pos float-right">Add +</button>
+<button id="addTodoBtn" type="button" class="btn btn-outline-success pos float-right" onclick="AddTodoClick()">Add +</button>
 <ul class="nav nav-tabs">
   <li class="nav-item">
     <a class="nav-link active" href="#">All</a>
@@ -25,7 +25,7 @@
     <a class="nav-link" href="#">Deadline</a>
   </li>
 </ul>
-
+<div id="todoList">
     {% for i in todos %}
         <li class="list-group-item d-flex justify-content-between align-items-center m-2 rounded">
             <div class="title">
@@ -49,8 +49,9 @@
             <span class="badge badge-{{ i.status.last.styleKey }} badge-pill">{{ i.status.last.title }}</span>
         </li>
     {% endfor %}
+</div>
 
-<form class="todoAddForm" method="post" action="{% url 'addTodo' %}">
+<form id="addTodoForm" class="todoAddForm d-none" method="post" action="{% url 'addTodo' %}">
     {% csrf_token %}
     {% for inp in todoAddForm %}
         {{ inp }}

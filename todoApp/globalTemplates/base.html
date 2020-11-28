@@ -1,16 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     {% load static %}
     {% load bootstrap4 %}
     <!-- CSS -->
     {% bootstrap_css %}
-    {% bootstrap_jquery %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <link rel="shortcut icon" href="{% static 'img/logo_icon_white.png' %}" type="image/png">
 
     <!-- JS -->
     {% bootstrap_javascript %}
+    {% bootstrap_jquery %}
+    <script>
+        function AddTodoClick(){
+            document.getElementById('todoList').classList.toggle('d-none');
+            document.getElementById('addTodoForm').classList.toggle('d-none');
+            document.getElementById('addTodoBtn').classList.toggle('active');
+        }
+    </script>
 
     <meta charset="UTF-8">
     <title>{% block title %}TodoApp{% endblock %}</title>
