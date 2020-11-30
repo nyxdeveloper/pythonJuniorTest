@@ -25,8 +25,35 @@
   <a class="navbar-brand" href="#"><b style="color:#E40B00;">TO</b><b style="color:#FFF;">DO</b></a>
 </nav>
 <div class="container">
+    <button id="addTodoBtn" type="button" class="btn btn-outline-success pos float-right" onclick="AddTodoClick()">Add +</button>
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" href="{% url 'myTodos' %}">Все</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'complated' %}">Выполненые</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'isTodo' %}">Выполняется</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'failed' %}">Проваленые</a>
+  </li>
+    <li class="nav-item">
+    <a class="nav-link" href="{% url 'deadline' %}">Deadline</a>
+  </li>
+</ul>
     {% block content %}
     {% endblock %}
+    <form id="addTodoForm" class="todoAddForm d-none" method="post" action="{% url 'addTodo' %}">
+    {% csrf_token %}
+    {% for inp in todoAddForm %}
+        {{ inp }}
+    {% endfor %}
+    <div class="container">
+        <button class="btn btn-lg btn-primary btn-block mt-2 w-25 ml-auto mr-auto" type="submit">Добавить</button>
+    </div>
+</form>
 </div>
 </body>
 </html>
