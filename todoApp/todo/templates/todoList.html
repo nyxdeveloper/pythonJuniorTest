@@ -1,19 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
     <div id="todoList">
-
             {% for i in todos %}
-                <li class="list-group-item d-flex justify-content-between align-items-center m-2 rounded">
-                    <div class="title">
-                        {% if not i.failed %}
+                <div class="list-group-item m-2">
+                    <div class="d-flex justify-content-between align-items-center m-2 rounded">
+                        <div class="title">
+                        {% if not i.failed and not i.status %}
                         <a href="{% url 'execute' el=i.id %}">
-                            <button style="font-size: 10px" class="rounded btn btn-outline-success">&#10004</button>
+                            <button style="font-size: 5px" class="rounded btn btn-outline-success">&#10004</button>
                         </a>
                         {% endif %}
                         <a href="{% url 'delete' el=i.id %}">
-                            <button style="font-size: 10px" class="rounded btn btn-outline-danger">&#10006</button>
+                            <button style="font-size: 5px" class="rounded btn btn-outline-danger">&#10006</button>
                         </a>
-                        {{ i.title }}
+                            <button id="btn-{{ i.id }}" class="btn">{{ i.title }}</button>
                     </div>
                     <div class="deadline">
                         {{ i.deadline }}
@@ -27,7 +27,17 @@
                     {% else %}
                         <span class="badge badge-primary badge-pill">Выполняется</span>
                     {% endif %}
-                </li>
+                    </div>
+                    <div id="desc-{{ i.id }}" class="container d-none">
+                        <hr>
+                        {{ i.description }}
+                    </div>
+                    <script>
+                        document.getElementById('btn-{{ i.id }}').onclick = function (){
+                            document.getElementById('desc-{{ i.id }}').classList.toggle('d-none');
+                        }
+                    </script>
+                </div>
             {% endfor %}
         {% if not todos %}
             <div class="text-center m-5 display-3">
