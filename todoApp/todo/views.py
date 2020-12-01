@@ -9,9 +9,11 @@ class TodoList(View):
         todos = Todo.objects.all()
         for i in todos:
             if datetime.date.today() > i.deadline:
-                i.failed = True
+                if not i.status:
+                    i.failed = True
             if datetime.date.today() == i.deadline:
-                i.lastDay = True
+                if not i.status:
+                    i.lastDay = True
         todoAddForm = TodoAddForm
         return render(request, 'todoList.html', {
             'todos': todos,
@@ -24,13 +26,15 @@ class IsTodo(View):
         temp = Todo.objects.all()
         for i in temp:
             if datetime.date.today() > i.deadline:
-                i.failed = True
+                if not i.status:
+                    i.failed = True
             if datetime.date.today() == i.deadline:
-                i.lastDay = True
+                if not i.status:
+                    i.lastDay = True
         todos = []
         todoAddForm = TodoAddForm
         for i in temp:
-            if not i.failed: todos.append(i)
+            if not i.failed and not i.status: todos.append(i)
         return render(request, 'complated.html', {
             'todos': todos,
             'todoAddForm': todoAddForm,
@@ -42,9 +46,11 @@ class Complated(View):
         temp = Todo.objects.all()
         for i in temp:
             if datetime.date.today() > i.deadline:
-                i.failed = True
+                if not i.status:
+                    i.failed = True
             if datetime.date.today() == i.deadline:
-                i.lastDay = True
+                if not i.status:
+                    i.lastDay = True
         todos = []
         todoAddForm = TodoAddForm
         for i in temp:
@@ -60,9 +66,11 @@ class Deadline(View):
         temp = Todo.objects.all()
         for i in temp:
             if datetime.date.today() > i.deadline:
-                i.failed = True
+                if not i.status:
+                    i.failed = True
             if datetime.date.today() == i.deadline:
-                i.lastDay = True
+                if not i.status:
+                    i.lastDay = True
         todos = []
         todoAddForm = TodoAddForm
         for i in temp:
@@ -78,9 +86,11 @@ class Failed(View):
         temp = Todo.objects.all()
         for i in temp:
             if datetime.date.today() > i.deadline:
-                i.failed = True
+                if not i.status:
+                    i.failed = True
             if datetime.date.today() == i.deadline:
-                i.lastDay = True
+                if not i.status:
+                    i.lastDay = True
         todos = []
         todoAddForm = TodoAddForm
         for i in temp:
@@ -97,4 +107,19 @@ class AddTodo(View):
         if boundForm.is_valid():
             boundForm.save()
             return redirect('/')
+        return redirect('/')
+
+
+class DeleteTodo(View):
+    def get(self, request, el):
+        Todo.objects.get(id=el).delete()
+        return redirect('/')
+
+
+class ExecuteTodo(View):
+    def get(self, request, el):
+        todo = Todo.objects.get(id=el)
+        todo.status = True
+        Todo.objects.get(id=el).delete()
+        todo.save()
         return redirect('/')

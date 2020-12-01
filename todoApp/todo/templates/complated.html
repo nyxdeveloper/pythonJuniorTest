@@ -6,15 +6,21 @@
                 <li class="list-group-item d-flex justify-content-between align-items-center m-2 rounded">
                     <div class="title">
                         {% if not i.failed %}
+                        <a href="{% url 'execute' el=i.id %}">
                             <button style="font-size: 10px" class="rounded btn btn-outline-success">&#10004</button>
+                        </a>
                         {% endif %}
-                        <button style="font-size: 10px" class="rounded btn btn-outline-danger">&#10006</button>
+                        <a href="{% url 'delete' el=i.id %}">
+                            <button style="font-size: 10px" class="rounded btn btn-outline-danger">&#10006</button>
+                        </a>
                         {{ i.title }}
                     </div>
                     <div class="deadline">
                         {{ i.deadline }}
                     </div>
-                    {% if i.failed %}
+                    {% if i.status %}
+                        <span class="badge badge-success badge-pill">Выполнено</span>
+                    {% elif i.failed %}
                         <span class="badge badge-danger badge-pill">Провалено</span>
                     {% elif i.lastDay %}
                         <span class="badge badge-warning badge-pill">Последний день</span>
@@ -25,7 +31,7 @@
             {% endfor %}
         {% if not todos %}
             <div class="text-center m-5 display-3">
-                Нет завершенных задач
+                Нет выполненных задач
             </div>
         {% endif %}
     </div>
