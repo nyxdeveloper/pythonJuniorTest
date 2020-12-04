@@ -5,5 +5,5 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('todo.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/', include('django.contrib.auth.urls'))
 ] + staticfiles_urlpatterns()

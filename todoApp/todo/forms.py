@@ -15,8 +15,9 @@ class TodoAddForm(forms.Form):
             {'class': 'form-control w-25 m-2', 'style': 'width: 33%; display: inline-block;', 'height': '3vh'})
         self.fields['description'].widget.attrs.update({'class': 'form-control m-2', 'placeholder': 'Описание'})
 
-    def save(self):
+    def save(self, request):
         new_todo = Todo.objects.create(
+            todoFilter=request.user,
             title=self.cleaned_data['title'],
             deadline=self.cleaned_data['deadline'],
             description=self.cleaned_data['description']
