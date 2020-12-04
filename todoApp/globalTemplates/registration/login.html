@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<script>
+    window.onload = function (){
+        document.getElementById('todoNavbar').classList.add('d-none');
+        document.getElementById('addTodoBtn').classList.add('d-none');
+    }
+</script>
+
+{% if next %}
+  {% if user.is_authenticated %}
+    <p>Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</p>
+  {% else %}
+    <p>Please login to see this page.</p>
+  {% endif %}
+{% endif %}
+<div class="container">
+    <form method="post" action="{% url 'login' %}" class="form-signin text-center w-50 ml-auto mr-auto mt-5">
+        {% csrf_token %}
+  <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+  {{ form.username }}<br>
+  <label class="sr-only">Password</label>
+  {{ form.password }}<br>
+  <div class="checkbox mb-3">
+    <label>
+      <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+    </label>
+  </div>
+        {% if form.errors %}
+            <p class="text-danger">Your username and password didn't match. Please try again.</p>
+        {% endif %}
+  <button class="btn btn-lg btn-primary btn-block w-50 ml-auto mr-auto" type="submit">Sign in</button>
+  <p class="mt-5 mb-3 text-muted">© 2020</p>
+</form>
+</div>
+
+
+
+{% endblock %}

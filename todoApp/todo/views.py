@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
-from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views import View, generic
 from .forms import *
 import datetime
 
 
 class TodoList(View):
     def get(self, request):
-        todos = Todo.objects.all()
+        todos = Todo.objects.filter(todoFilter=self.request.user)
         for i in todos:
             if datetime.date.today() > i.deadline:
                 if not i.status:
@@ -23,7 +24,7 @@ class TodoList(View):
 
 class IsTodo(View):
     def get(self, request):
-        temp = Todo.objects.all()
+        temp = Todo.objects.filter(todoFilter = self.request.user)
         for i in temp:
             if datetime.date.today() > i.deadline:
                 if not i.status:
@@ -43,7 +44,7 @@ class IsTodo(View):
 
 class Complated(View):
     def get(self, request):
-        temp = Todo.objects.all()
+        temp = Todo.objects.filter(todoFilter = self.request.user)
         for i in temp:
             if datetime.date.today() > i.deadline:
                 if not i.status:
@@ -63,7 +64,7 @@ class Complated(View):
 
 class Deadline(View):
     def get(self, request):
-        temp = Todo.objects.all()
+        temp = Todo.objects.filter(todoFilter = self.request.user)
         for i in temp:
             if datetime.date.today() > i.deadline:
                 if not i.status:
@@ -83,7 +84,7 @@ class Deadline(View):
 
 class Failed(View):
     def get(self, request):
-        temp = Todo.objects.all()
+        temp = Todo.objects.filter(todoFilter = self.request.user)
         for i in temp:
             if datetime.date.today() > i.deadline:
                 if not i.status:

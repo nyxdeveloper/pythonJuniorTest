@@ -46,6 +46,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, 'globalTemplates'),
+            os.path.join(BASE_DIR, 'globalTemplates/registration'),
             os.path.join(BASE_DIR, 'todo/templates'),
         ],
         'APP_DIRS': True,
@@ -113,3 +114,4 @@ STATICFILES_DIRS = [
     STATIC_DIR,
 ]
 
+LOGIN_REDIRECT_URL = '/'
