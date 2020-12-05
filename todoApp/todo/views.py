@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import FormView
 from django.views import View
@@ -8,25 +8,29 @@ import datetime
 
 class RegisterFormView(FormView):
     form_class = UserCreationForm
-
-    # Ссылка, на которую будет перенаправляться пользователь в случае успешной регистрации.
-    # В данном случае указана ссылка на страницу входа для зарегистрированных пользователей.
-    success_url = "account/login/"
-
-    # Шаблон, который будет использоваться при отображении представления.
+    #   Ссылка, на которую будет перенаправляться пользователь в случае успешной регистрации.
+    #   В данном случае указана ссылка на страницу входа для зарегистрированных пользователей.
+    success_url = "/accounts/login/"
+    #   Шаблон, который будет использоваться при отображении представления.
     template_name = "register.html"
 
     def form_valid(self, form):
         # Создаём пользователя, если данные в форму были введены корректно.
         form.save()
-
-        # Вызываем метод базового класса
+        #   Вызываем метод базового класса
         return super(RegisterFormView, self).form_valid(form)
 
 
+#   список всех задач пользователя
 class TodoList(View):
     def get(self, request):
+        #   проверка пользователя на авторизованность, аналогично во всех представлениях
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect('/accounts/login')
+        #   фильтрация задач по ключу, аналогично во всех представлениях
         todos = Todo.objects.filter(todoFilter=self.request.user)
+        #   проверка и добавление статуса задаче относительно настоящего времени, в каждом представлении
+        #   свой принцип проверки
         for i in todos:
             if datetime.date.today() > i.deadline:
                 if not i.status:
@@ -41,9 +45,12 @@ class TodoList(View):
         })
 
 
+#   список задач пользователя, находящихся в выполнении
 class IsTodo(View):
     def get(self, request):
-        temp = Todo.objects.filter(todoFilter = self.request.user)
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect('/accounts/login')
+        temp = Todo.objects.filter(todoFilter=self.request.user)
         for i in temp:
             if datetime.date.today() > i.deadline:
                 if not i.status:
@@ -51,6 +58,7 @@ class IsTodo(View):
             if datetime.date.today() == i.deadline:
                 if not i.status:
                     i.lastDay = True
+        #   конечный список задач с определенным статусом
         todos = []
         todoAddForm = TodoAddForm
         for i in temp:
@@ -61,9 +69,12 @@ class IsTodo(View):
         })
 
 
+#   выполненные задачи пользователя
 class Complated(View):
     def get(self, request):
-        temp = Todo.objects.filter(todoFilter = self.request.user)
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect('/accounts/login')
+        temp = Todo.objects.filter(todoFilter=self.request.user)
         for i in temp:
             if datetime.date.today() > i.deadline:
                 if not i.status:
@@ -71,6 +82,7 @@ class Complated(View):
             if datetime.date.today() == i.deadline:
                 if not i.status:
                     i.lastDay = True
+        #   конечный список задач с определенным статусом
         todos = []
         todoAddForm = TodoAddForm
         for i in temp:
@@ -81,9 +93,12 @@ class Complated(View):
         })
 
 
+#   задачи пользователя, на выполнение которых остался один день
 class Deadline(View):
     def get(self, request):
-        temp = Todo.objects.filter(todoFilter = self.request.user)
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect('/accounts/login')
+        temp = Todo.objects.filter(todoFilter=self.request.user)
         for i in temp:
             if datetime.date.today() > i.deadline:
                 if not i.status:
@@ -91,6 +106,7 @@ class Deadline(View):
             if datetime.date.today() == i.deadline:
                 if not i.status:
                     i.lastDay = True
+        #   конечный список задач с определенным статусом
         todos = []
         todoAddForm = TodoAddForm
         for i in temp:
@@ -101,9 +117,12 @@ class Deadline(View):
         })
 
 
+#   проваленные задачи пользователя
 class Failed(View):
     def get(self, request):
-        temp = Todo.objects.filter(todoFilter = self.request.user)
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect('/accounts/login')
+        temp = Todo.objects.filter(todoFilter=self.request.user)
         for i in temp:
             if datetime.date.today() > i.deadline:
                 if not i.status:
@@ -111,6 +130,7 @@ class Failed(View):
             if datetime.date.today() == i.deadline:
                 if not i.status:
                     i.lastDay = True
+        #   конечный список задач с определенным статусом
         todos = []
         todoAddForm = TodoAddForm
         for i in temp:
@@ -121,8 +141,11 @@ class Failed(View):
         })
 
 
+#   добавление задачи
 class AddTodo(View):
     def post(self, request):
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect('/accounts/login')
         boundForm = TodoAddForm(request.POST)
         if boundForm.is_valid():
             boundForm.save(request)
@@ -130,14 +153,20 @@ class AddTodo(View):
         return redirect('/')
 
 
+#   удаление задачи
 class DeleteTodo(View):
     def get(self, request, el):
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect('/accounts/login')
         Todo.objects.get(id=el).delete()
         return redirect('/')
 
 
+#   выполнение задачи
 class ExecuteTodo(View):
     def get(self, request, el):
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect('/accounts/login')
         todo = Todo.objects.get(id=el)
         todo.status = True
         Todo.objects.get(id=el).delete()

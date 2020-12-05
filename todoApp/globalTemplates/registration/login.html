@@ -4,6 +4,7 @@
     window.onload = function (){
         document.getElementById('todoNavbar').classList.add('d-none');
         document.getElementById('addTodoBtn').classList.add('d-none');
+        document.getElementById('usr').classList.add('d-none');
     }
 </script>
 
@@ -26,6 +27,9 @@
     <label>
       <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
     </label>
+      <label>
+          <a href="{% url 'register' %}">Регистрация</a>
+      </label>
   </div>
         {% if form.errors %}
             <p class="text-danger">Your username and password didn't match. Please try again.</p>

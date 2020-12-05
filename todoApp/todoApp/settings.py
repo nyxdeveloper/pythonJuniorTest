@@ -14,7 +14,7 @@ SECRET_KEY = 'g03oo8$&&#jx4+**#s%f-mh4bjeit4o1yds+m9zlbhe-*&2rd^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -45,9 +45,9 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'globalTemplates'),
-            os.path.join(BASE_DIR, 'globalTemplates/registration'),
-            os.path.join(BASE_DIR, 'todo/templates'),
+            os.path.join(BASE_DIR, 'globalTemplates'),  #   глобальные шаблоны
+            os.path.join(BASE_DIR, 'globalTemplates/registration'),     #   шаблоны авторизации
+            os.path.join(BASE_DIR, 'todo/templates'),   #   шаблоны приложения
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -114,4 +114,5 @@ STATICFILES_DIRS = [
     STATIC_DIR,
 ]
 
+#   ссылка перенаправления вошедшего пользователя
 LOGIN_REDIRECT_URL = '/'

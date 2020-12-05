@@ -22,7 +22,11 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5">
-  <a class="navbar-brand" href="#"><b style="color:#E40B00;">TO</b><b style="color:#FFF;">DO</b></a>
+  <a class="navbar-brand" href=""><b style="color:#E40B00;">TO</b><b style="color:#FFF;">DO</b></a>
+    <div id="usr" class="ml-auto">
+        <span class="ml-auto mr-2 text-light">Добро пожаловать, {{ request.user }}</span>
+        <a href="{% url 'exit' %}"><button class="btn btn-outline-danger">Выход</button></a>
+    </div>
 </nav>
 <div class="container">
     <button id="addTodoBtn" type="button" class="btn btn-outline-success pos float-right" onclick="AddTodoClick()">Add +</button>

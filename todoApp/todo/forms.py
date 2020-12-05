@@ -7,6 +7,7 @@ class TodoAddForm(forms.Form):
     deadline = forms.DateField(widget=forms.SelectDateWidget)
     description = forms.CharField(max_length=2000, widget=forms.Textarea)
 
+    #   инициализация полей формы с классами bootstrap
     def __init__(self, *args, **kwargs):
         super(TodoAddForm, self).__init__(*args, **kwargs)
         self.fields['title'].widget.attrs.update(
@@ -17,6 +18,7 @@ class TodoAddForm(forms.Form):
 
     def save(self, request):
         new_todo = Todo.objects.create(
+            #   привязка задачи к нынешнему пользователю
             todoFilter=request.user,
             title=self.cleaned_data['title'],
             deadline=self.cleaned_data['deadline'],
